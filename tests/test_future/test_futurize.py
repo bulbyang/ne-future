@@ -42,12 +42,12 @@ class TestLibFuturize(unittest.TestCase):
         Tests whether the fixer_util.is_encoding_comment() function is working.
         """
         shebang_comments = [u'#!/usr/bin/env python\n'
-                             u"#!/usr/bin/python2\n",
-                             u"#! /usr/bin/python3\n",
+                            u"#!/usr/bin/python2\n",
+                            u"#! /usr/bin/python3\n",
                             ]
         not_shebang_comments = [u"# I saw a giant python\n",
-                                 u"# I have never seen a python2\n",
-                               ]
+                                u"# I have never seen a python2\n",
+                                ]
         for comment in shebang_comments:
             node = FromImport(u'math', [Leaf(token.NAME, u'cos', prefix=" ")])
             node.prefix = comment
@@ -58,7 +58,6 @@ class TestLibFuturize(unittest.TestCase):
             node.prefix = comment
             self.assertFalse(is_shebang_comment(node))
 
-
     def test_is_encoding_comment(self):
         """
         Tests whether the fixer_util.is_encoding_comment() function is working.
@@ -67,11 +66,11 @@ class TestLibFuturize(unittest.TestCase):
                              u"# encoding: utf-8",
                              u"# -*- coding: latin-1 -*-",
                              u"# vim: set fileencoding=iso-8859-15 :",
-                            ]
+                             ]
         not_encoding_comments = [u"# We use the file encoding utf-8",
                                  u"coding = 'utf-8'",
                                  u"encoding = 'utf-8'",
-                                ]
+                                 ]
         for comment in encoding_comments:
             node = FromImport(u'math', [Leaf(token.NAME, u'cos', prefix=" ")])
             node.prefix = comment
@@ -1197,6 +1196,86 @@ class TestFuturizeStage1(CodeHandler):
         """
         self.convert_check(before, after)
 
+    def test_dict(self):
+        """Tests whether Py2's dicts method will be wrapped by future.utils functions, to generate same outcome
+        """
+
+        before = """
+        tel = {'jack': 4098, 'sape': 4139, 'guido': 4127}
+
+        keyiter = tel.iterkeys()
+        valueiter = tel.itervalues()
+        itemiter = tel.iteritems()
+
+        for key in tel.iterkeys():
+            pass
+        for value in tel.itervalues():
+            pass
+        for (key,value) in tel.iteritems():
+            pass
+
+        keyview = tel.viewkeys()
+        valueview = tel.viewvalues()
+        itemview = tel.viewitems()
+
+        for key in tel.viewkeys():
+            pass
+        for value in tel.viewvalues():
+            pass
+        for (key,value) in tel.viewitems():
+            pass
+
+        keylist = tel.keys()
+        valuelist = tel.values()
+        itemlist = tel.items()
+
+        for key in tel.keys():
+            pass
+        for value in tel.values():
+            pass
+        for (key,value) in tel.items():
+            pass
+        """
+        after = """
+        from __future__ import absolute_import
+        from future.utils import iterkeys, itervalues, iteritems, viewkeys, viewvalues, viewitems
+        tel = {'jack': 4098, 'sape': 4139, 'guido': 4127}
+
+        keyiter = iterkeys(tel)
+        valueiter = itervalues(tel)
+        itemiter = iteritems(tel)
+
+        for key in iterkeys(tel):
+            pass
+        for value in itervalues(tel):
+            pass
+        for (key,value) in iteritems(tel):
+            pass
+
+        keyview = viewkeys(tel)
+        valueview = viewvalues(tel)
+        itemview = viewitems(tel)
+
+        for key in viewkeys(tel):
+            pass
+        for value in viewvalues(tel):
+            pass
+        for (key,value) in viewitems(tel):
+            pass
+
+        keylist = list(tel.keys())
+        valuelist = list(tel.values())
+        itemlist = list(tel.items())
+
+        for key in tel.keys():
+            pass
+        for value in tel.values():
+            pass
+        for (key,value) in tel.items():
+            pass
+        """
+        self.convert_check(before, after)
+
     def test_safe_division(self):
         """
         Tests whether Py2 scripts using old-style division still work
@@ -1426,7 +1505,8 @@ class TestFuturizeAllImports(CodeHandler):
             pass
         print('Hello')
         """
-        self.convert_check(before, after, all_imports=True, ignore_imports=False)
+        self.convert_check(before, after, all_imports=True,
+                           ignore_imports=False)
 
 
 if __name__ == '__main__':
