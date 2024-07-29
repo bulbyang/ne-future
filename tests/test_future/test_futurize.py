@@ -1196,6 +1196,27 @@ class TestFuturizeStage1(CodeHandler):
         """
         self.convert_check(before, after)
 
+    def test_file(self):
+        """Tests whether Py2's file can be replaced by open 
+        """
+        before = """
+        file('some/file/path', 'r')
+
+        with file('some/file/path', 'r') as file_:
+            pass
+
+        file('path').readlines
+        """
+        after = """
+        open('some/file/path', 'r')
+
+        with open('some/file/path', 'r') as file_:
+            pass
+
+        open('path').readlines
+        """
+        self.convert_check(before, after, run=False)
+
     def test_dict(self):
         """Tests whether Py2's dicts method will be wrapped by future.utils functions, to generate same outcome
         """
