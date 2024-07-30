@@ -14,7 +14,7 @@ lib2to3_fix_names_stage1 = set([
     'lib2to3.fixes.fix_has_key',
     'lib2to3.fixes.fix_idioms',
     # 'lib2to3.fixes.fix_import',    # makes any implicit relative imports explicit. (Use with ``from __future__ import absolute_import)
-    'lib2to3.fixes.fix_intern',
+    # 'lib2to3.fixes.fix_intern',    # from sys import intern invalid on python2
     'lib2to3.fixes.fix_isinstance',
     'lib2to3.fixes.fix_methodattrs',
     'lib2to3.fixes.fix_ne',
