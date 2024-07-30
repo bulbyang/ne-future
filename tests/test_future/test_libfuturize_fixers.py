@@ -756,15 +756,21 @@ class Test_raise(FixerTestCase):
         a = """raise Exception(5) # foo"""
         self.check(b, a)
 
-        b = """def foo():
-                    raise Exception, 5, 6 # foo"""
-        a = """def foo():
-                    raise Exception(5).with_traceback(6) # foo"""
+        b = """
+        def foo():
+            raise Exception, 5, 6 # foo"""
+        a = """
+        from future.utils import raise_with_traceback
+        def foo():
+            raise_with_traceback(Exception(5), 6) # foo"""
         self.check(b, a)
 
     def test_None_value(self):
-        b = """raise Exception(5), None, tb"""
-        a = """raise Exception(5).with_traceback(tb)"""
+        b = """
+        raise Exception(5), None, tb"""
+        a = """
+        from future.utils import raise_with_traceback
+        raise_with_traceback(Exception(5), tb)"""
         self.check(b, a)
 
     def test_tuple_value(self):
@@ -829,57 +835,75 @@ class Test_raise(FixerTestCase):
     # These should result in traceback-assignment
 
     def test_tb_1(self):
-        b = """def foo():
-                    raise Exception, 5, 6"""
-        a = """def foo():
-                    raise Exception(5).with_traceback(6)"""
+        b = """
+        def foo():
+            raise Exception, 5, 6"""
+        a = """
+        from future.utils import raise_with_traceback
+        def foo():
+            raise_with_traceback(Exception(5), 6)"""
         self.check(b, a)
 
     def test_tb_2(self):
-        b = """def foo():
-                    a = 5
-                    raise Exception, 5, 6
-                    b = 6"""
-        a = """def foo():
-                    a = 5
-                    raise Exception(5).with_traceback(6)
-                    b = 6"""
+        b = """
+        def foo():
+            a = 5
+            raise Exception, 5, 6
+            b = 6"""
+        a = """
+        from future.utils import raise_with_traceback
+        def foo():
+            a = 5
+            raise_with_traceback(Exception(5), 6)
+            b = 6"""
         self.check(b, a)
 
     def test_tb_3(self):
-        b = """def foo():
-                    raise Exception,5,6"""
-        a = """def foo():
-                    raise Exception(5).with_traceback(6)"""
+        b = """
+        def foo():
+            raise Exception,5,6"""
+        a = """
+        from future.utils import raise_with_traceback
+        def foo():
+            raise_with_traceback(Exception(5), 6)"""
         self.check(b, a)
 
     def test_tb_4(self):
-        b = """def foo():
-                    a = 5
-                    raise Exception,5,6
-                    b = 6"""
-        a = """def foo():
-                    a = 5
-                    raise Exception(5).with_traceback(6)
-                    b = 6"""
+        b = """
+        def foo():
+            a = 5
+            raise Exception,5,6
+            b = 6"""
+        a = """
+        from future.utils import raise_with_traceback
+        def foo():
+            a = 5
+            raise_with_traceback(Exception(5), 6)
+            b = 6"""
         self.check(b, a)
 
     def test_tb_5(self):
-        b = """def foo():
-                    raise Exception, (5, 6, 7), 6"""
-        a = """def foo():
-                    raise Exception(5, 6, 7).with_traceback(6)"""
+        b = """
+        def foo():
+            raise Exception, (5, 6, 7), 6"""
+        a = """
+        from future.utils import raise_with_traceback
+        def foo():
+            raise_with_traceback(Exception(5, 6, 7), 6)"""
         self.check(b, a)
 
     def test_tb_6(self):
-        b = """def foo():
-                    a = 5
-                    raise Exception, (5, 6, 7), 6
-                    b = 6"""
-        a = """def foo():
-                    a = 5
-                    raise Exception(5, 6, 7).with_traceback(6)
-                    b = 6"""
+        b = """
+        def foo():
+            a = 5
+            raise Exception, (5, 6, 7), 6
+            b = 6"""
+        a = """
+        from future.utils import raise_with_traceback
+        def foo():
+            a = 5
+            raise_with_traceback(Exception(5, 6, 7), 6)
+            b = 6"""
         self.check(b, a)
 #
 # class Test_throw(FixerTestCase):
