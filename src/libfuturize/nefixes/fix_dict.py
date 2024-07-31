@@ -1,5 +1,5 @@
 """
-Fixer for iterkeys() -> six.iterkeys(), and similarly for iteritems and itervalues.
+Fixer for iterkeys() -> future.utils.iterkeys(), and similarly for iteritems and itervalues.
 """
 
 from __future__ import generator_stop
@@ -18,7 +18,7 @@ class FixDict(fix_dict.FixDict):
         # fixer_util.touch_import_top(u"future.utils",u"utils",node)
 
         # Copy of self.transform() from fissix.fix_dict with some changes to
-        # use the six.* methods.
+        # use the future.utils methods.
 
         head = results["head"]
         method = results["method"][0]  # Extract node for method name

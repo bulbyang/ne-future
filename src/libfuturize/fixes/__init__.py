@@ -69,12 +69,12 @@ lib2to3_fix_names_stage2 = set([
 
 libfuturize_fix_names_stage1 = set([
     'libfuturize.fixes.fix_absolute_import',
-    'libfuturize.fixes.fix_file',
+    # 'libfuturize.fixes.fix_file', # move to nefixes
     'libfuturize.fixes.fix_next_call',  # obj.next() -> next(obj). Unlike
                                         # lib2to3.fixes.fix_next, doesn't change
                                         # the ``next`` method to ``__next__``.
     'libfuturize.fixes.fix_print_with_import',
-    'libfuturize.fixes.fix_raise',
+    # 'libfuturize.fixes.fix_raise',  # move to nefixes
     # 'libfuturize.fixes.fix_order___future__imports',  # TODO: consolidate to a single line to simplify testing
 ])
 
@@ -82,17 +82,17 @@ libfuturize_fix_names_stage2 = set([
     'libfuturize.fixes.fix_basestring',
     # 'libfuturize.fixes.fix_add__future__imports_except_unicode_literals',  # just in case
     'libfuturize.fixes.fix_cmp',
-    'libfuturize.fixes.fix_dict',
+    # 'libfuturize.fixes.fix_dict', # move to nefixes
     'libfuturize.fixes.fix_division_safe',
     'libfuturize.fixes.fix_execfile',
     'libfuturize.fixes.fix_future_builtins',
     'libfuturize.fixes.fix_future_standard_library',
     'libfuturize.fixes.fix_future_standard_library_urllib',
     'libfuturize.fixes.fix_input',
-    'libfuturize.fixes.fix_intern',
-    'libfuturize.fixes.fix_itertools',
-    'libfuturize.fixes.fix_itertools_import',
-    'libfuturize.fixes.fix_itertools_imports',
+    # 'libfuturize.fixes.fix_intern', # move to nefixes
+    # 'libfuturize.fixes.fix_itertools',
+    # 'libfuturize.fixes.fix_itertools_import',
+    # 'libfuturize.fixes.fix_itertools_imports', # move to nefixes
     'libfuturize.fixes.fix_metaclass',
     'libpasteurize.fixes.fix_newstyle',
     'libfuturize.fixes.fix_object',
