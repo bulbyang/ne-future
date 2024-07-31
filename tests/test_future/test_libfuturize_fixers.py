@@ -29,13 +29,16 @@ proj_dir = os.path.normpath(os.path.join(test_dir, ".."))
 # def parse_string(string):
 #     return driver.parse_string(reformat(string), debug=True)
 
+
 def run_all_tests(test_mod=None, tests=None):
     if tests is None:
         tests = unittest.TestLoader().loadTestsFromModule(test_mod)
     unittest.TextTestRunner(verbosity=2).run(tests)
 
+
 def reformat(string):
     return dedent(string) + u"\n\n"
+
 
 def get_refactorer(fixer_pkg="lib2to3", fixers=None, options=None):
     """
@@ -51,6 +54,7 @@ def get_refactorer(fixer_pkg="lib2to3", fixers=None, options=None):
         fixers = refactor.get_fixers_from_package(fixer_pkg + ".fixes")
     options = options or {}
     return refactor.RefactoringTool(fixers, options, explicit=True)
+
 
 def all_project_files():
     for dirpath, dirnames, filenames in os.walk(proj_dir):
@@ -113,11 +117,11 @@ class FixerTestCase(unittest.TestCase):
         if pre and pre[-1].__class__.__module__.endswith(n) and not post:
             # We're the last in pre and post is empty
             return
-        self.fail("Fixer run order (%s) is incorrect; %s should be last."\
-               %(", ".join([x.__class__.__module__ for x in (pre+post)]), n))
+        self.fail("Fixer run order (%s) is incorrect; %s should be last."
+                  % (", ".join([x.__class__.__module__ for x in (pre+post)]), n))
 
 
-############### EDIT the tests below ...
+# EDIT the tests below ...
 #
 # class Test_ne(FixerTestCase):
 #     fixer = "ne"
@@ -233,6 +237,7 @@ class Test_intern(FixerTestCase):
 #         s = "reduce()"
 #         self.unchanged(s)
 
+
 class Test_print(FixerTestCase):
     fixer = "print"
 
@@ -331,7 +336,6 @@ class Test_print(FixerTestCase):
         b = r"""print "%s\n" % (1,),"""
         a = r"""print("%s\n" % (1,), end='')"""
         self.check(b, a)
-
 
     def test_trailing_comma_9(self):
         b = r"""print r"e\n","""
@@ -3551,65 +3555,71 @@ class Test_raise(FixerTestCase):
 #     def test_run_order(self):
 #         self.assert_runs_after('print')
 #
-# class Test_itertools(FixerTestCase):
-#     fixer = "itertools"
-#
-#     def checkall(self, before, after):
-#         # Because we need to check with and without the itertools prefix
-#         # and on each of the three functions, these loops make it all
-#         # much easier
-#         for i in ('itertools.', ''):
-#             for f in ('map', 'filter', 'zip'):
-#                 b = before %(i+'i'+f)
-#                 a = after %(f)
-#                 self.check(b, a)
-#
-#     def test_0(self):
-#         # A simple example -- test_1 covers exactly the same thing,
-#         # but it's not quite as clear.
-#         b = "itertools.izip(a, b)"
-#         a = "zip(a, b)"
-#         self.check(b, a)
-#
-#     def test_1(self):
-#         b = """%s(f, a)"""
-#         a = """%s(f, a)"""
-#         self.checkall(b, a)
-#
-#     def test_qualified(self):
-#         b = """itertools.ifilterfalse(a, b)"""
-#         a = """itertools.filterfalse(a, b)"""
-#         self.check(b, a)
-#
-#         b = """itertools.izip_longest(a, b)"""
-#         a = """itertools.zip_longest(a, b)"""
-#         self.check(b, a)
-#
-#     def test_2(self):
-#         b = """ifilterfalse(a, b)"""
-#         a = """filterfalse(a, b)"""
-#         self.check(b, a)
-#
-#         b = """izip_longest(a, b)"""
-#         a = """zip_longest(a, b)"""
-#         self.check(b, a)
-#
-#     def test_space_1(self):
-#         b = """    %s(f, a)"""
-#         a = """    %s(f, a)"""
-#         self.checkall(b, a)
-#
-#     def test_space_2(self):
-#         b = """    itertools.ifilterfalse(a, b)"""
-#         a = """    itertools.filterfalse(a, b)"""
-#         self.check(b, a)
-#
-#         b = """    itertools.izip_longest(a, b)"""
-#         a = """    itertools.zip_longest(a, b)"""
-#         self.check(b, a)
-#
-#     def test_run_order(self):
-#         self.assert_runs_after('map', 'zip', 'filter')
+
+
+class Test_itertools(FixerTestCase):
+    fixer = "itertools"
+
+    def checkall(self, before, after):
+        # Because we need to check with and without the itertools prefix
+        # and on each of the three functions, these loops make it all
+        # much easier
+        for i in ('itertools.',''):
+            for f in ('map', 'filter', 'zip'):
+                b = before % (i+'i'+f)
+                if i=='':
+                    a = after % (f)
+                else :
+                    a = "from builtins import %s\n"%(f)+after%(f)
+                self.check(b, a)
+
+    def test_0(self):
+        # A simple example -- test_1 covers exactly the same thing,
+        # but it's not quite as clear.
+        b = "itertools.izip(a, b)"
+        a = "from builtins import zip\nzip(a, b)"
+        self.check(b, a)
+
+    def test_1(self):
+        b = """%s(f, a)"""
+        a = """%s(f, a)"""
+        self.checkall(b, a)
+
+    def test_qualified(self):
+        b = """itertools.ifilterfalse(a, b)"""
+        a = """itertools.filterfalse(a, b)"""
+        self.check(b, a)
+
+        b = """itertools.izip_longest(a, b)"""
+        a = """itertools.zip_longest(a, b)"""
+        self.check(b, a)
+
+    def test_2(self):
+        b = """ifilterfalse(a, b)"""
+        a = """filterfalse(a, b)"""
+        self.check(b, a)
+
+        b = """izip_longest(a, b)"""
+        a = """zip_longest(a, b)"""
+        self.check(b, a)
+
+    # def test_space_1(self):
+    #     b = """    %s(f, a)"""
+    #     a = """    %s(f, a)"""
+    #     self.checkall(b, a)
+
+    # def test_space_2(self):
+    #     b = """    itertools.ifilterfalse(a, b)"""
+    #     a = """    itertools.filterfalse(a, b)"""
+    #     self.check(b, a)
+
+    #     b = """    itertools.izip_longest(a, b)"""
+    #     a = """    itertools.zip_longest(a, b)"""
+    #     self.check(b, a)
+
+# self.assert_runs_after need to fix
+    # def test_run_order(self):
+    #     self.assert_runs_after('map', 'zip', 'filter')
 #
 #
 # class Test_itertools_imports(FixerTestCase):
