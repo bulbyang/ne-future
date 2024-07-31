@@ -189,6 +189,7 @@ MOVES = [('collections', 'UserList', 'UserList', 'UserList'),
          ('itertools', 'filterfalse','itertools', 'ifilterfalse'),
          ('itertools', 'zip_longest','itertools', 'izip_longest'),
          ('sys', 'intern','__builtin__', 'intern'),
+         ('importlib', 'reload', 'imp', 'reload'),
          ('multiprocessing', 'SimpleQueue', 'multiprocessing.queues', 'SimpleQueue'),
          # The re module has no ASCII flag in Py2, but this is the default.
          # Set re.ASCII to a zero constant. stat.ST_MODE just happens to be one
@@ -819,3 +820,5 @@ def import_top_level_modules():
                 __import__(m)
             except ImportError:     # e.g. winreg
                 pass
+if __name__== "__main__":
+    install_aliases()

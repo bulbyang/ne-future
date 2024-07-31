@@ -152,7 +152,24 @@ class FixerTestCase(unittest.TestCase):
 #         a = """x = f(*g + h)"""
 #         self.check(b, a)
 #
-#
+class Test_reload(FixerTestCase):
+    fixer = "reload"
+
+    def test(self):
+        b = """x = reload(a)"""
+        a = """from future import standard_library\nstandard_library.install_aliases()\nfrom importlib import reload\nx = reload(a)"""
+        self.check(b, a)
+
+        b = """y = reload("b" # test
+              )"""
+        a = """from future import standard_library\nstandard_library.install_aliases()\nfrom importlib import reload\ny = reload("b" # test
+              )"""
+        self.check(b, a)
+
+        b = """z = reload(a+b+c.d,   )"""
+        a = """from future import standard_library\nstandard_library.install_aliases()\nfrom importlib import reload\nz = reload(a+b+c.d,   )"""
+        self.check(b, a)
+
 class Test_intern(FixerTestCase):
     fixer = "intern"
 
