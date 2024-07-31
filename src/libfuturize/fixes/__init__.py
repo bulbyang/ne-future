@@ -51,8 +51,8 @@ lib2to3_fix_names_stage2 = set([
     # 'lib2to3.fixes.fix_imports',   # called by libfuturize.fixes.fix_future_standard_library
     # 'lib2to3.fixes.fix_imports2',  # we don't handle this yet (dbm)
     # 'lib2to3.fixes.fix_input',     # Called conditionally by libfuturize.fixes.fix_input
-    # 'lib2to3.fixes.fix_itertools',
-    'lib2to3.fixes.fix_itertools_imports',
+    # 'lib2to3.fixes.fix_itertools', # custom one in libfuturize
+    # 'lib2to3.fixes.fix_itertools_imports', # custom one in libfuturize for 23 complatibility
     'lib2to3.fixes.fix_filter',
     'lib2to3.fixes.fix_long',
     'lib2to3.fixes.fix_map',
@@ -91,7 +91,7 @@ libfuturize_fix_names_stage2 = set([
     'libfuturize.fixes.fix_input',
     'libfuturize.fixes.fix_intern',
     'libfuturize.fixes.fix_itertools',
-    # 'libfuturize.fixes.fix_itertools_imports',
+    'libfuturize.fixes.fix_itertools_imports',
     'libfuturize.fixes.fix_metaclass',
     'libpasteurize.fixes.fix_newstyle',
     'libfuturize.fixes.fix_object',
