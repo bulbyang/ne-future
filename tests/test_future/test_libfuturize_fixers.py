@@ -1576,102 +1576,102 @@ class Test_raise(FixerTestCase):
 #         self.unchanged(s)
 #
 #
-# class ImportsFixerTests:
-#
-#     def test_import_module(self):
-#         for old, new in self.modules.items():
-#             b = "import %s" % old
-#             a = "import %s" % new
-#             self.check(b, a)
-#
-#             b = "import foo, %s, bar" % old
-#             a = "import foo, %s, bar" % new
-#             self.check(b, a)
-#
-#     def test_import_from(self):
-#         for old, new in self.modules.items():
-#             b = "from %s import foo" % old
-#             a = "from %s import foo" % new
-#             self.check(b, a)
-#
-#             b = "from %s import foo, bar" % old
-#             a = "from %s import foo, bar" % new
-#             self.check(b, a)
-#
-#             b = "from %s import (yes, no)" % old
-#             a = "from %s import (yes, no)" % new
-#             self.check(b, a)
-#
-#     def test_import_module_as(self):
-#         for old, new in self.modules.items():
-#             b = "import %s as foo_bar" % old
-#             a = "import %s as foo_bar" % new
-#             self.check(b, a)
-#
-#             b = "import %s as foo_bar" % old
-#             a = "import %s as foo_bar" % new
-#             self.check(b, a)
-#
-#     def test_import_from_as(self):
-#         for old, new in self.modules.items():
-#             b = "from %s import foo as bar" % old
-#             a = "from %s import foo as bar" % new
-#             self.check(b, a)
-#
-#     def test_star(self):
-#         for old, new in self.modules.items():
-#             b = "from %s import *" % old
-#             a = "from %s import *" % new
-#             self.check(b, a)
-#
-#     def test_import_module_usage(self):
-#         for old, new in self.modules.items():
-#             b = """
-#                 import %s
-#                 foo(%s.bar)
-#                 """ % (old, old)
-#             a = """
-#                 import %s
-#                 foo(%s.bar)
-#                 """ % (new, new)
-#             self.check(b, a)
-#
-#             b = """
-#                 from %s import x
-#                 %s = 23
-#                 """ % (old, old)
-#             a = """
-#                 from %s import x
-#                 %s = 23
-#                 """ % (new, old)
-#             self.check(b, a)
-#
-#             s = """
-#                 def f():
-#                     %s.method()
-#                 """ % (old,)
-#             self.unchanged(s)
-#
-#             # test nested usage
-#             b = """
-#                 import %s
-#                 %s.bar(%s.foo)
-#                 """ % (old, old, old)
-#             a = """
-#                 import %s
-#                 %s.bar(%s.foo)
-#                 """ % (new, new, new)
-#             self.check(b, a)
-#
-#             b = """
-#                 import %s
-#                 x.%s
-#                 """ % (old, old)
-#             a = """
-#                 import %s
-#                 x.%s
-#                 """ % (new, old)
-#             self.check(b, a)
+class ImportsFixerTests:
+
+    def test_import_module(self):
+        for old, new in self.modules.items():
+            b = "import %s" % old
+            a = "import %s" % new
+            self.check(b, a)
+
+            b = "import foo, %s, bar" % old
+            a = "import foo, %s, bar" % new
+            self.check(b, a)
+
+    def test_import_from(self):
+        for old, new in self.modules.items():
+            b = "from %s import foo" % old
+            a = "from %s import foo" % new
+            self.check(b, a)
+
+            b = "from %s import foo, bar" % old
+            a = "from %s import foo, bar" % new
+            self.check(b, a)
+
+            b = "from %s import (yes, no)" % old
+            a = "from %s import (yes, no)" % new
+            self.check(b, a)
+
+    def test_import_module_as(self):
+        for old, new in self.modules.items():
+            b = "import %s as foo_bar" % old
+            a = "import %s as foo_bar" % new
+            self.check(b, a)
+
+            b = "import %s as foo_bar" % old
+            a = "import %s as foo_bar" % new
+            self.check(b, a)
+
+    def test_import_from_as(self):
+        for old, new in self.modules.items():
+            b = "from %s import foo as bar" % old
+            a = "from %s import foo as bar" % new
+            self.check(b, a)
+
+    def test_star(self):
+        for old, new in self.modules.items():
+            b = "from %s import *" % old
+            a = "from %s import *" % new
+            self.check(b, a)
+
+    def test_import_module_usage(self):
+        for old, new in self.modules.items():
+            b = """
+                import %s
+                foo(%s.bar)
+                """ % (old, old)
+            a = """
+                import %s
+                foo(%s.bar)
+                """ % (new, new)
+            self.check(b, a)
+
+            b = """
+                from %s import x
+                %s = 23
+                """ % (old, old)
+            a = """
+                from %s import x
+                %s = 23
+                """ % (new, old)
+            self.check(b, a)
+
+            s = """
+                def f():
+                    %s.method()
+                """ % (old,)
+            self.unchanged(s)
+
+            # test nested usage
+            b = """
+                import %s
+                %s.bar(%s.foo)
+                """ % (old, old, old)
+            a = """
+                import %s
+                %s.bar(%s.foo)
+                """ % (new, new, new)
+            self.check(b, a)
+
+            b = """
+                import %s
+                x.%s
+                """ % (old, old)
+            a = """
+                import %s
+                x.%s
+                """ % (new, old)
+            self.check(b, a)
 #
 #
 # class Test_imports(FixerTestCase, ImportsFixerTests):
@@ -3622,6 +3622,31 @@ class Test_itertools(FixerTestCase):
     #     self.assert_runs_after('map', 'zip', 'filter')
 #
 #
+class Test_itertools_import(FixerTestCase, ImportsFixerTests):
+    fixer='itertools_import'
+    from libfuturize.fixes.fix_itertools_import import MAPPING as modules
+    def test_ifilter_and_zip_longest(self):
+        b = """
+            import itertools
+            s = itertools.ifilterfalse(a,b)
+            """
+        a = """
+            import future.moves.itertools
+            s = future.moves.itertools.ifilterfalse(a,b)
+            """
+        self.check(b, a)
+        b = """
+            import itertools
+            s = itertools.ifilterfalse(a,b)
+            s = itertools.izip_longest(a,b)
+            """
+        a = """
+            import future.moves.itertools
+            s = future.moves.itertools.ifilterfalse(a,b)
+            s = future.moves.itertools.izip_longest(a,b)
+            """
+        self.check(b, a)
+
 class Test_itertools_imports(FixerTestCase):
     fixer = 'itertools_imports'
 
@@ -3675,7 +3700,7 @@ class Test_itertools_imports(FixerTestCase):
     def test_unchanged(self):
         s = "from itertools import foo"
         self.unchanged(s)
-#
+
 #
 # class Test_import(FixerTestCase):
 #     fixer = "import"

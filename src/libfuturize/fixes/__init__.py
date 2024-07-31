@@ -91,6 +91,7 @@ libfuturize_fix_names_stage2 = set([
     'libfuturize.fixes.fix_input',
     'libfuturize.fixes.fix_intern',
     'libfuturize.fixes.fix_itertools',
+    'libfuturize.fixes.fix_itertools_import',
     'libfuturize.fixes.fix_itertools_imports',
     'libfuturize.fixes.fix_metaclass',
     'libpasteurize.fixes.fix_newstyle',
